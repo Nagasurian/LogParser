@@ -1,0 +1,47 @@
+
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+apply plugin: "eclipse"
+apply plugin: "com.github.johnrengelman.shadow"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use 'jcenter' for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
+	jcenter()
+	maven {
+	   url "https://repository.mulesoft.org/nexus/content/groups/public/"
+    }
+}
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+   compile (
+			[ group: "commons-cli", name: "commons-cli", version: "1.4", transitive: true],
+			[ group: "org.springframework", name: "spring-core", version: "4.3.5.RELEASE", transitive: true],
+			[ group: "org.springframework", name: "spring-context", version: "4.3.5.RELEASE", transitive: true],
+			[ group: "org.springframework.batch", name: "spring-batch-core", version: "3.0.7.RELEASE", transitive: true],
+			[ group: "org.springframework.batch", name: "spring-batch-infrastructure", version: "3.0.7.RELEASE", transitive: true],
+			[ group: "org.springframework", name: "spring-oxm", version: "3.2.2.RELEASE", transitive: true],
+			[ group: "org.springframework", name: "spring-jdbc", version: "4.3.5.RELEASE", transitive: true],
+			[ group: "mysql", name: "mysql-connector-java", version: "5.1.27", transitive: true]
+           )
+}
+
+shadowJar {
+    mergeServiceFiles('META-INF/spring.*')
+	archiveName = "parser.${extension}"
+}
